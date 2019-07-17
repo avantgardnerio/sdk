@@ -2,6 +2,7 @@ import ITransport from './../../interfaces/iTransport';
 import IHuddlyDeviceAPI from './../../interfaces/iHuddlyDeviceAPI';
 import DefaultLogger from './../../utilitis/logger';
 import IDeviceManager from './../../interfaces/iDeviceManager';
+import IDeviceFactory from './../../interfaces/iDeviceFactory';
 import HuddlyGo from './huddlygo';
 import Boxfish from './boxfish';
 import { EventEmitter } from 'events';
@@ -11,6 +12,9 @@ export const HUDDLY_BOXFISH_PID = 0x21;
 export const HUDDLY_BOXFISH_PRODTEST_PID = 0x22;
 export const HUDDLY_CLOWNFISH_PID = 0x31;
 
+export function createFactory(): IDeviceFactory {
+  return DeviceFactory;
+}
 
 export default class DeviceFactory {
 
