@@ -9,6 +9,8 @@ const usbApi = new HuddlyDeviceAPIUSB();
 // Create an instance of the SDK
 const sdk = new HuddlySdk(usbApi, [usbApi]);
 
+let count = 0;
+
 async function init() {
   await sdk.init();
 
@@ -17,7 +19,7 @@ async function init() {
     await detector.init();
 
     detector.on('DETECTIONS', detections => {
-      trackPeopleCount(meetingRoomName, detections.length);
+      console.log(`${detections.length} people detected`)
     });
 
     detector.start();
