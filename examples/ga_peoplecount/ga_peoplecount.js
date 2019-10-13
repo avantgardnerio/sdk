@@ -19,7 +19,7 @@ async function init() {
     await detector.init();
 
     detector.on('DETECTIONS', detections => {
-      console.log(`${detections.length} people detected`)
+      console.log(`${JSON.stringify(detections)}`)
     });
 
     detector.start();
