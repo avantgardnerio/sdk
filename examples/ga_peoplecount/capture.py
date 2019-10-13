@@ -5,48 +5,31 @@ import select
 import re
 import json
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 proc = None
 
-frame = None
-annotated = None
-while(True):
+while (True):
     if proc is None:
         proc = subprocess.Popen(['node', 'ga_peoplecount.js'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         poller = select.poll()
         poller.register(proc.stdout)
 
-    detections = []
     if poller is not None:
         if poller.poll(20):
             line = proc.stdout.readline()
             try:
-                detections = json.loads(line)
-                print(detections)
-                if frame is not None:
-                    width = frame.shape[1]
-                    height = frame.shape[0]
-                    annotated = frame.copy()
-                    for detection in detections:
-                        if detection['label'] == "head":
-                            box = detection['bbox']
-                            cv2.rectangle(
-                                annotated,
-                                (box['x'] * width, box['y'] * height),
-                                (box['width'] * width, box['height'] * height),
-                                (0, 0, 255),
-                                1
-                            )
+                json_object = json.loads(line)
+                print(json_object)
             except ValueError as e:
                 print(line)
 
+    # Capture frame-by-frame
     ret, frame = cap.read()
-    if annotated is not None:
-        cv2.imshow('frame', annotated)
-    else:
-        if frame is not None:
-            cv2.imshow('frame', frame)
+
+    # Our operations on the frame come here
+    if frame is not None:
+        cv2.imshow('frame', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
