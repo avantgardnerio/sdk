@@ -1,3 +1,5 @@
+import datetime
+
 import numpy as np
 import cv2
 import subprocess
@@ -9,6 +11,7 @@ cap = cv2.VideoCapture(2)
 
 proc = None
 
+frame = None
 while (True):
     if proc is None:
         proc = subprocess.Popen(['node', 'ga_peoplecount.js'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -18,8 +21,13 @@ while (True):
         if res:
             line = proc.stdout.readline()
             try:
-                json_object = json.loads(line)
-                print(json_object)
+                detections = json.loads(line)
+                now = datetime.datetime.now().isoformat().replace(":", "-")
+                if frame is not None:
+                    print(now, detections)
+                    with open(f"data\\{now}.json", "w") as text_file:
+                        text_file.write(json.dumps(detections))
+                    cv2.imwrite(f"data\\{now}.png", frame)
             except ValueError as e:
                 print(line)
 

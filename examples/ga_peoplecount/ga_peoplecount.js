@@ -15,7 +15,7 @@ async function init() {
   await sdk.init();
 
   sdk.on('ATTACH', async (cameraManager) => {
-    const detector = await cameraManager.getDetector();
+    const detector = await cameraManager.getDetector({DOWS: false, shouldAutoFrame: false});
     await detector.init();
 
     detector.on('DETECTIONS', detections => {
