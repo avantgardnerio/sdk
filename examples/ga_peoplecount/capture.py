@@ -12,11 +12,10 @@ proc = None
 while (True):
     if proc is None:
         proc = subprocess.Popen(['node', 'ga_peoplecount.js'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        poller = select.poll()
-        poller.register(proc.stdout)
 
-    if poller is not None:
-        if poller.poll(20):
+    if proc is not None:
+        res = proc.stdout.peek()
+        if res:
             line = proc.stdout.readline()
             try:
                 json_object = json.loads(line)
